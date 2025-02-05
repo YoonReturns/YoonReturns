@@ -1,0 +1,11 @@
+{
+    "name":"Yoon Returns",
+    "symbol":"SaveKR",
+    "description":"Meme Coin of President Yoon",
+    "image":"https://ipfs.io/ipfs/bafybeidppurzg3n3fitn7yy6dm4rmb7yqudnhec4swyqmompzixwsdhune",
+    "extensions":{
+        "twitter": "https://x.com/YoonReturns",
+        "telegram" : "https://t.me/YoonReturns",
+        "Kakaotalk" : "https://open.kakao.com/o/g7vCXoeh"
+    }
+}
