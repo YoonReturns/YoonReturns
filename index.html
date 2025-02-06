@@ -1,9 +1,80 @@
-<html>
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-    <title>Yoon Returns</title>
+  <meta charset="UTF-8">
+  <title>테스트</title>
+  <style>
+    /* 기본 스타일 초기화 */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    /* 헤더 영역 */
+    header {
+      display: flex;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #f8f8f8;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 로고 영역 */
+    .logo {
+      margin-right: 30px;
+    }
+    .logo img {
+      height: 40px; /* 원하는 높이로 조절 */
+    }
+
+    /* 네비게이션 메뉴 */
+    nav ul {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+    }
+    nav ul li {
+      margin-right: 20px;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+    nav ul li a:hover {
+      color: #007bff;
+    }
+
+    /* 컨텐츠 영역 */
+    .content {
+      padding: 20px;
+    }
+  </style>
 </head>
 <body>
-    BUY Yoon Returns!!!! <br />
-    MINT ADDRESS : 6umzTAfv7N8Wf63EyA6XYbT1WJQ4pyVZ1tz1BRsdc26s
+  <!-- 헤더: 로고와 메뉴 네비게이터 -->
+  <header>
+    <!-- 로고 (클릭 시 index.html로 이동) -->
+    <div class="logo">
+      <a href="index.html">
+        <img src="logo.png" alt="로고">
+      </a>
+    </div>
+    <!-- 메뉴 네비게이터 -->
+    <nav>
+      <ul>
+        <li><a href="page1.html">메뉴1</a></li>
+        <li><a href="page2.html">메뉴2</a></li>
+        <li><a href="page3.html">메뉴3</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- 컨텐츠 영역: 각 페이지마다 원하는 내용을 출력 -->
+  <div class="content">
+    <h1>메인 페이지 컨텐츠</h1>
+    <p>여기에 메인 페이지에 대한 내용을 입력하세요.</p>
+  </div>
 </body>
 </html>
