@@ -2,21 +2,25 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>세분화된 반응형 CSS Scroll Snap 슬라이드 + 플로팅 버튼</title>
+  <title>Apple 디자인 감성의 슬라이드 및 원형 그래프</title>
   <style>
+    /* Global Apple 스타일 */
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
       scroll-behavior: smooth;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f5f5f7;
+      color: #1d1d1f;
     }
-    /* 스크롤 컨테이너 */
+    /* Scroll Snap 컨테이너 */
     .container {
       height: 100%;
       overflow-y: scroll;
       scroll-snap-type: y mandatory;
     }
-    /* 각 섹션 */
+    /* 각 슬라이드 섹션 (공통 스타일) */
     .section {
       height: 100vh;
       scroll-snap-align: start;
@@ -24,88 +28,326 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 2em;
-      color: #fff;
       padding: 20px;
       box-sizing: border-box;
+      background-color: #fff;
+      border: 1px solid #e0e0e0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      margin: 10px;
+      border-radius: 6px;
     }
-    .section:nth-child(1) { background: #1bbc9b; }
-    .section:nth-child(2) { background: #4BBFC3; }
-    .section:nth-child(3) { background: #7BAABE; }
-    .section:nth-child(4) { background: #f90; }
-
-    /* 기본 상태: 모바일 컨텐츠만 표시 */
-    .pc-content { display: none; }
-    .mobile-content { display: block; }
-
-    /* 768px 이상부터 PC 컨텐츠 표시 (모바일 숨김) */
+    /* 반응형 폰트 크기 조정 */
     @media screen and (min-width: 768px) {
-      .pc-content { display: block; }
-      .mobile-content { display: none; }
+      .section { font-size: 1.5rem; }
     }
-
-    /* 브라우저 너비에 따른 추가 스타일 조정 */
-    /* 768px ~ 1023px : 태블릿 또는 작은 PC 화면 */
-    @media screen and (min-width: 768px) and (max-width: 1023px) {
-      .section {
-        font-size: 2.5em;
-      }
+    @media screen and (min-width: 1024px) {
+      .section { font-size: 1.75rem; }
     }
-    /* 1024px ~ 1279px : 일반적인 PC 화면 */
-    @media screen and (min-width: 1024px) and (max-width: 1279px) {
-      .section {
-        font-size: 3em;
-      }
-    }
-    /* 1280px 이상 : 큰 PC 화면 */
     @media screen and (min-width: 1280px) {
-      .section {
-        font-size: 3.5em;
-      }
+      .section { font-size: 2rem; }
     }
-
-    /* 플로팅 버튼 스타일 */
+    /* 플로팅 버튼 (우측 상단, 첫 슬라이드에서는 숨김) */
     .floating-btn {
       position: fixed;
       top: 20px;
       right: 20px;
       padding: 10px 20px;
-      font-size: 1em;
-      background-color: #007bff;
+      font-size: 1rem;
+      font-weight: 500;
+      background-color: #007aff;
       color: #fff;
       border: none;
-      border-radius: 5px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       z-index: 1000;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s, opacity 0.3s;
     }
     .floating-btn:hover {
-      background-color: #0056b3;
+      background-color: #005bb5;
+    }
+    /* 슬라이드 1 전용: 4행 배치 (vertical spacing: space-evenly) */
+    .section.slide1 {
+      justify-content: space-evenly;
+    }
+    .slide1-row {
+      width: 100%;
+      text-align: center;
+    }
+    .slide1-row h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+    .buy-btn {
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      background-color: #007aff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .buy-btn:hover {
+      background-color: #005bb5;
+    }
+    .social-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+    .social-btn {
+      padding: 8px 16px;
+      font-size: 1rem;
+      background-color: #e0e0e0;
+      color: #1d1d1f;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .social-btn:hover {
+      background-color: #c8c8c8;
+    }
+    /* 차트 관련 스타일 */
+    .chart-wrapper {
+      text-align: center;
+      width: 100%;
+    }
+    .chart-title {
+      margin-bottom: 10px;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    .pie-chart-container {
+      position: relative;
+      display: inline-block;
+      /* 화면 크기에 따라 유동적으로 크기 조절 (최소 200px, 최대 400px) */
+      width: clamp(200px, 25vw, 400px);
+      height: clamp(200px, 25vw, 400px);
+    }
+    .pie-chart {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    /* 기존 차트 내부 레이블 (첫번째, 두번째 그래프는 그대로 사용) */
+    .chart-label {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      font-size: 0.9rem;
+      color: #fff;
+      font-weight: bold;
+      /* 그림자 효과로 가독성 개선 */
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+    }
+    /* 첫 번째 원형 그래프: "변화하고 있는 지지율"  
+       - 지지한다: 51% → #007aff  
+       - 지지하지 않는다: 47.8% → #ff3b30  
+       - 잘 모르겠다: 1.1% → #8e8e93  */
+    .pie-chart.chart1 {
+      background: conic-gradient(
+        #007aff 0% 51%,
+        #ff3b30 51% 98.9%,
+        #8e8e93 98.9% 100%
+      );
+    }
+    .chart1-label1 { left: 82%; top: 51%; }   /* 지지한다 */
+    .chart1-label2 { left: 18%; top: 50%; }   /* 지지하지 않는다 */
+    .chart1-label3 { left: 50%; top: 18%; }    /* 잘 모르겠다 */
+    /* 두 번째 원형 그래프: "탄핵안 관련 의견"  
+       - 인용: 51.4% → #007aff  
+       - 기각: 46.9% → #ff3b30  
+       - 기타: 1.7% → #8e8e93  */
+    .pie-chart.chart2 {
+      background: conic-gradient(
+        #007aff 0% 51.4%,
+        #ff3b30 51.4% 98.3%,
+        #8e8e93 98.3% 100%
+      );
+    }
+    .chart2-label1 { left: 82%; top: 51%; }   /* 인용 */
+    .chart2-label2 { left: 18%; top: 50%; }   /* 기각 */
+    .chart2-label3 { left: 50%; top: 18%; }    /* 기타 */
+    /* 세 번째 원형 그래프: "토크노믹스" → 이번에는 그래프 내부에 라벨을 넣지 않고, */
+    /* 오른쪽에 별도 flex 레이아웃으로 커넥터 선과 함께 텍스트를 배치 */
+    .tokenomics-chart-layout {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .tokenomics-labels {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .tokenomics-label {
+      position: relative;
+      padding-left: 20px;
+      font-size: 0.9rem;
+      color: #1d1d1f;
+      white-space: nowrap;
+    }
+    /* 커넥터 선: 오른쪽에 선을 그어 그래프와 라벨을 연결 */
+    .tokenomics-label::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 15px;
+      border-top: 1px solid #8e8e93;
+      transform: translateY(-50%);
+    }
+    .pie-chart.chart3 {
+      background: conic-gradient(
+        #34c759 0% 80%,
+        #007aff 80% 90%,
+        #ff9f0a 90% 95%,
+        #af52de 95% 100%
+      );
+    }
+    /* 차트 하단 출처 및 토크노믹스 상세 설명 (슬라이드 5에서 가운데 정렬) */
+    .chart-source,
+    .tokenomics-details {
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: #8e8e93;
+      text-align: center;
+    }
+    .tokenomics-details {
+      margin-top: 20px;
+      font-size: 1rem;
+      line-height: 1.5;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    /* 슬라이드 2: 추가 텍스트 스타일 (윤석열 대통령 관련 메시지, 300자 내외) */
+    .slide2-text {
+      max-width: 800px;
+      line-height: 1.6;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <!-- 모든 슬라이드에서 보이는 우측 상단 플로팅 버튼 -->
+  <!-- 우측 상단 플로팅 버튼 (모든 슬라이드 공통; 첫 슬라이드에서는 JS로 숨김 처리) -->
   <button class="floating-btn">플로팅 버튼</button>
 
   <div class="container">
-    <div class="section">
-      <!-- PC 전용 컨텐츠와 모바일 전용 컨텐츠를 각각 작성 -->
-      <div class="pc-content">PC 슬라이드 1: 큰 화면용 컨텐츠</div>
-      <div class="mobile-content">모바일 슬라이드 1: 작은 화면용 컨텐츠</div>
+    <!-- 슬라이드 1: 4행 구성 -->
+    <div class="section slide1">
+      <!-- 1행: 제목 -->
+      <div class="slide1-row">
+        <h1>Yoon Returns</h1>
+      </div>
+      <!-- 2행: 로고 이미지 (512x512 png) -->
+      <div class="slide1-row">
+        <img src="logo.png" alt="Logo" width="512" height="512">
+      </div>
+      <!-- 3행: Buy Now 버튼 -->
+      <div class="slide1-row">
+        <button class="buy-btn">Buy Now</button>
+      </div>
+      <!-- 4행: 소셜 서비스 버튼 3개 -->
+      <div class="slide1-row">
+        <div class="social-buttons">
+          <button class="social-btn">Facebook</button>
+          <button class="social-btn">Twitter</button>
+          <button class="social-btn">Instagram</button>
+        </div>
+      </div>
     </div>
+    
+    <!-- 슬라이드 2: 윤석열 대통령 관련 (300자 내외 메시지) -->
     <div class="section">
-      <div class="pc-content">PC 슬라이드 2: 큰 화면용 컨텐츠</div>
-      <div class="mobile-content">모바일 슬라이드 2: 작은 화면용 컨텐츠</div>
+      <div class="slide2-text">
+        윤석열 대통령은 기각된 후에도 국민들의 목소리에 귀 기울이며, 새로운 시대의 계몽과 혁신을 위해 돌아왔습니다. 그의 리더십은 과거의 한계를 극복하고 미래 지향적 비전으로 국민 모두가 함께하는 사회를 만들어 나가겠다는 강한 의지를 담고 있습니다. 이제 그의 귀환은 국민들에게 희망과 변화를 상징하는 새로운 시작이 될 것입니다.
+      </div>
     </div>
+    
+    <!-- 슬라이드 3: 첫 번째 원형 그래프 "변화하고 있는 지지율" -->
     <div class="section">
-      <div class="pc-content">PC 슬라이드 3: 큰 화면용 컨텐츠</div>
-      <div class="mobile-content">모바일 슬라이드 3: 작은 화면용 컨텐츠</div>
+      <div class="chart-wrapper">
+        <div class="chart-title">변화하고 있는 지지율</div>
+        <div class="pie-chart-container">
+          <div class="pie-chart chart1"></div>
+          <div class="chart-label chart1-label1">지지한다 51%</div>
+          <div class="chart-label chart1-label2">지지하지 않는다 47.8%</div>
+          <div class="chart-label chart1-label3">잘 모르겠다 1.1%</div>
+        </div>
+        <div class="chart-source">출처 : 여론조사공정. 2025.02.04</div>
+      </div>
     </div>
+    
+    <!-- 슬라이드 4: 두 번째 원형 그래프 "탄핵안 관련 의견" -->
     <div class="section">
-      <div class="pc-content">PC 슬라이드 4: 큰 화면용 컨텐츠</div>
-      <div class="mobile-content">모바일 슬라이드 4: 작은 화면용 컨텐츠</div>
+      <div class="chart-wrapper">
+        <div class="chart-title">탄핵안 관련 의견</div>
+        <div class="pie-chart-container">
+          <div class="pie-chart chart2"></div>
+          <div class="chart-label chart2-label1">인용 61.2 → 51.4% (-9.8%)</div>
+          <div class="chart-label chart2-label2">기각 37 → 46.9% (+9.9%)</div>
+          <div class="chart-label chart2-label3">기타 1.7%</div>
+        </div>
+        <div class="chart-source">출처 : 에이스리서치. 2025.02.01~02</div>
+      </div>
+    </div>
+    
+    <!-- 슬라이드 5: 토크노믹스 (그래프 오른쪽에 커넥터 선과 함께 라벨 배치) -->
+    <div class="section">
+      <div class="chart-wrapper">
+        <div class="chart-title">토크노믹스</div>
+        <div class="tokenomics-chart-layout">
+          <div class="pie-chart-container">
+            <div class="pie-chart chart3"></div>
+          </div>
+          <div class="tokenomics-labels">
+            <div class="tokenomics-label">80% Initial LP (Burn)</div>
+            <div class="tokenomics-label">10% For Yoon</div>
+            <div class="tokenomics-label">5% Marketing</div>
+            <div class="tokenomics-label">5% Team</div>
+          </div>
+        </div>
+        <div class="chart-source">출처 : (토크노믹스 출처 명시 필요시)</div>
+        <div class="tokenomics-details">
+          <p><strong>Team (5%)</strong><br>
+          팀 물량을 최소화하여 커뮤니티의 수익성을 극대화합니다.</p>
+          <p><strong>Marketing (5%)</strong><br>
+          지속적인 커뮤니티 운영을 위해 쓰입니다.</p>
+          <p><strong>For Yoon (10%)</strong><br>
+          추후 윤석열 대통령님의 솔라나 지갑이 확인되면, 10%의 물량을 전송합니다.</p>
+          <p><strong>Initial-LP (80%)</strong><br>
+          나머지 모든 물량은 시장을 통해 거래할 수 있습니다.<br>
+          LP는 모두 소각(Permanent Lock)하여, 개발자 러그를 방지하였습니다.<br>
+          소각 확인 : Explorer 주소</p>
+        </div>
+      </div>
     </div>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const container = document.querySelector('.container');
+      const floatingBtn = document.querySelector('.floating-btn');
+      
+      function toggleFloatingButton() {
+        // 스크롤 위치가 50px 미만인 경우(첫 슬라이드) 버튼 숨김 처리
+        if (container.scrollTop < 50) {
+          floatingBtn.style.opacity = '0';
+          floatingBtn.style.pointerEvents = 'none';
+        } else {
+          floatingBtn.style.opacity = '1';
+          floatingBtn.style.pointerEvents = 'auto';
+        }
+      }
+      
+      container.addEventListener('scroll', toggleFloatingButton);
+      toggleFloatingButton();
+    });
+  </script>
 </body>
 </html>
